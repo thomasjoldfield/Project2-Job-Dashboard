@@ -24,12 +24,21 @@ def index():
 
 
 @app.route("/airports/<iata_code>")
-def Airports():
+def AirportsFunc():
     """Return a list of Airports."""
-    return render_template("flights.html")
+    #return render_template("flights.html")
+    #FROM airport SELECT * WHERE name = iata_code
+    Airport_df = pd.read_sql_query(SELECT * FROM Airports WHERE name = 'iata_code',
+         con=engine, index_col="iata_code",
+         coerce_float=True, params=None,
+          parse_dates=None,
+           chunksize=None)
+    #there is an error in line 31 for invalid syntax
+    #not sure what the problem is, messed with several options, still looking into it.
     Airport = Base.classes.Airport
-    results = session.query(Airport.name).all()
+    results = session.query(Airport).all()
     Airports = list(np.ravel(results))
+    return Airport_df
     return jsonify(Airports)
 
 @app.route("/flights")
