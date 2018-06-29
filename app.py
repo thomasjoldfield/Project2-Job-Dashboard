@@ -6,6 +6,7 @@ from flask import (
     redirect)
 
 from flask_sqlalchemy import SQLAlchemy
+from sqlalchemy import or_
 import os
 
 #flask setup
@@ -59,11 +60,42 @@ class Airport(db.Model):
 def index():
    return render_template("index.html")
 
+@app.route("/compare")
+def compare():
+    return render_template("compare.html")
+
+@app.route("/about")
+def about():
+    return render_template("about.html")
+
+@app.route("/flights")
+def flights():
+    return render_template("flights.html")
+
 
 #Sweet. Now, query the database and send the jsonified results
+
+@app.route("/airports")
+def AllAirportsFunc():
+    """Return a list of Airports."""
+    results = db.session.query(Airport.iata_code, Airport.name, Airport.latitude, Airport.longitude, Airport.average_wait).all()
+
+    all_airports_data = []
+    for result in results:
+        all_airports_data.append({
+            result[0] : {
+                "name" : result[1],
+                "lat" : result[2],
+                "long" : result[3],
+                "wait" : result[4]
+            }
+        })
+
+    return jsonify(all_airports_data)
+
 @app.route("/airports/<aircode>")
 def AirportsFunc(aircode):
-    """Return a list of Airports."""
+    """Return a details about a specific Airport."""
     results = db.session.query(Airport.iata_code, Airport.name, Airport.latitude, Airport.longitude, Airport.average_wait).filter(Airport.iata_code == aircode )
 
     airport_data = [{
@@ -77,7 +109,7 @@ def AirportsFunc(aircode):
     return jsonify(airport_data)
 
 @app.route("/delays/<takeoff>")
-def DelayFunc(takeoff):
+def AllDelayFunc(takeoff):
     results = db.session.query(Delay.id, Delay.FlightDate, Delay.Origin, Delay.Dest, Delay.UniqueCarrier, Delay.Cancelled, Delay.DepDelay, Delay.ArrDelay).filter(Delay.Origin == takeoff)
 
     delay_data = []
@@ -96,6 +128,58 @@ def DelayFunc(takeoff):
         })
 
     return jsonify(delay_data)
+
+@app.route("/delays/<takeoff>/<landing>")
+def DelayFunc(takeoff, landing):
+    results = db.session.query(Delay.id, Delay.FlightDate, Delay.Origin, Delay.Dest, Delay.UniqueCarrier, Delay.Cancelled, Delay.DepDelay, Delay.ArrDelay).filter(Delay.Origin == takeoff).filter(Delay.Dest == landing)
+
+    delay_data = []
+
+    for result in results:
+        delay_data.append({
+            result[0] : {
+                "date" : result[1],
+                "origin" : result[2],
+                "dest" : result[3],
+                "carrier" : result[4],
+                "cancel" : result[5],
+                "delayDep" : result[6],
+                "delayArr" : result[7]
+            }
+        })
+
+    return jsonify(delay_data)
+
+
+
+
+#this route is specifically for our "mariokart" chart
+@app.route("/delaycomparison/<takeoff>/<landing>")
+def DelayComparison(takeoff, landing):
+    results = db.session.query(Delay.id, Delay.FlightDate, Delay.Origin, Delay.Dest, Delay.UniqueCarrier, Delay.Cancelled, Delay.DepDelay, Delay.ArrDelay).filter(Delay.Origin == takeoff).filter(Delay.Dest == landing)
+    airport_result = db.session.query(Airport.iata_code, Airport.average_wait).filter(or_(Airport.iata_code == takeoff, Airport.iata_code == landing))
+
+    delay_list = []
+    cancel_list = []
+    compare_data = []
+
+    for result in results:
+        delay_list.append(result.ArrDelay)
+        cancel_list.append(result.Cancelled)
+    
+    delay_number = sum(delay_list) / len(delay_list)
+    cancel_number = (sum(cancel_list) / len(delay_list))*10
+    tsa_number = airport_result[0].average_wait + airport_result[1].average_wait
+
+    compare_data.append({
+        "x" : ["Delays", "Cancelations", "TSA Wait"],
+        "y" : [delay_number, cancel_number, tsa_number],
+        "type" : "bar"
+    })
+
+    return jsonify(compare_data)
+
+
 
 if __name__ == '__main__':
     app.run()
