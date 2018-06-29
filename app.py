@@ -12,6 +12,8 @@ import os
 #flask setup
 app = Flask(__name__)
 
+app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
+
 #setup that database!
 app.config['SQLALCHEMY_DATABASE_URI'] = "sqlite:///TravelStressor3.sqlite"
 
@@ -161,21 +163,30 @@ def DelayComparison(takeoff, landing):
 
     delay_list = []
     cancel_list = []
-    compare_data = []
 
     for result in results:
         delay_list.append(result.ArrDelay)
         cancel_list.append(result.Cancelled)
     
-    delay_number = sum(delay_list) / len(delay_list)
-    cancel_number = (sum(cancel_list) / len(delay_list))*10
-    tsa_number = airport_result[0].average_wait + airport_result[1].average_wait
+    #equation should be (average / worst) * 100
+    delay_number = ((sum(delay_list) / len(delay_list)) / 10) * 100
+    cancel_number = ((sum(cancel_list) / len(delay_list)) / .2) * 100
+    tsa_number = ((airport_result[0].average_wait + airport_result[1].average_wait) / 27 * 100)
+    R1 = (255 * delay_number) / 100
+    G1 = (255 * (100-delay_number)) / 100
+    R2 = (255 * cancel_number) / 100
+    G2 = (255 * (100-cancel_number)) / 100
+    R3 = (255 * tsa_number) / 100
+    G3 = (255 * (100-tsa_number)) / 100
 
-    compare_data.append({
+    compare_data = {
         "x" : ["Delays", "Cancelations", "TSA Wait"],
         "y" : [delay_number, cancel_number, tsa_number],
-        "type" : "bar"
-    })
+        "type" : "bar",
+        #"orientation" : "h",
+        "marker" : {
+            "color" : [f"rgba({R1},{G1},0,1)", f"rgba({R2},{G2},0,1)", f"rgba({R3},{G3},0,1)",]}
+    }
 
     return jsonify(compare_data)
 

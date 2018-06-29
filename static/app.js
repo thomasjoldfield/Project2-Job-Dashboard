@@ -114,17 +114,7 @@ function buildComparePlot() {
 
       var data = [response];
   
-      var layout = {
-        title: `Stress Levels: ${origin} to ${dest}`,
-        xaxis: {
-          title: "Indicators"
-        },
-        yaxis: {
-          title: "Stress Level"
-        }
-      };
-  
-      Plotly.newPlot("plot", data, layout);
+      Plotly.newPlot("plot", data);
     });
   }
   
