@@ -7,6 +7,7 @@
   <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
   <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
   <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+  <script src="https://cdn.plot.ly/plotly-latest.min.js"></script>
   <style>
     /* Remove the navbar's default margin-bottom and rounded borders */ 
     .navbar {
@@ -39,10 +40,10 @@
       </div>
       <div class="collapse navbar-collapse" id="myNavbar">
         <ul class="nav navbar-nav">
-          <li><a href="index.html">Home</a></li>
-          <li><a href="flights.html">Stressors</a></li>
-          <li  class="active"><a href="compare.html">Comparison</a></li>
-          <li><a href="about.html">About</a></li>
+          <li><a href="/">Home</a></li>
+          <li><a href="/flight">Stressors</a></li>
+          <li  class="active"><a href="/compare">Comparison</a></li>
+          <li><a href="/about">About</a></li>
 
         </ul>
         <ul class="nav navbar-nav navbar-right dropdown">
@@ -61,7 +62,7 @@
   <div class="container text-center">    
     <h1></h1><br>
     <div class="row">
-      <div id="origin" class="col-lg-6">
+      <div id="plot" class="col-lg-6">
         <img src="https://placehold.it/150x80?text=STATS" class="img-responsive" style="width:100%" alt="Image">
         <div class="col-md-6">
             <form autocomplete="off" action="/action_page.php">
@@ -92,7 +93,7 @@
     <p>GitHub: <a href="https://github.com/thomasjoldfield/Project2-Job-Dashboard">https://github.com/thomasjoldfield/Project2-Job-Dashboard</a></p>
 
   </footer>
-  <script src="{{ url_for('static', filename='js/app.js') }}"></script>
+  <script src="{{ url_for('static', filename='app.js') }}"></script>
 </body>
 </html>
 

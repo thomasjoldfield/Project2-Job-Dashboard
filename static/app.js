@@ -100,3 +100,33 @@ var airports = ['{{ Airports[1] }}', '{{ Airports[2] }}']
 
 /*initiate the autocomplete function on the "myInput" element, and pass along the countries array as possible autocomplete values:*/
 autocomplete(document.getElementById("myInput"), airports);
+
+/*Thomas is adding this part here to build our comparison bar charts*/
+function buildComparePlot() {
+    /* data route */
+    /*Make this dynamic*/
+    var origin = "DCA";
+    var dest = "SFO";
+    var url = `/delaycomparison/${origin}/${dest}`;
+    Plotly.d3.json(url, function(error, response) {
+  
+      console.log(response);
+
+      var data = [response];
+  
+      var layout = {
+        title: `Stress Levels: ${origin} to ${dest}`,
+        xaxis: {
+          title: "Indicators"
+        },
+        yaxis: {
+          title: "Stress Level"
+        }
+      };
+  
+      Plotly.newPlot("plot", data, layout);
+    });
+  }
+  
+buildComparePlot();
+  
