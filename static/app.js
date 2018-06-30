@@ -1,9 +1,19 @@
+//some button listeners
+$(function(){
+  if($('body').is('.compare')){
+    document.getElementById("compareBtn").addEventListener("click", buildComparePlot);
+  }
+});
+
+
+
+
 /*Thomas is adding this part here to build our comparison bar charts*/
 function buildComparePlot() {
     /* data route */
     /*Make this dynamic*/
-    var origin = "DCA";
-    var dest = "SFO";
+    var origin = document.getElementById("origin_input").value;
+    var dest = document.getElementById("dest_input").value;
     var url = `/delaycomparison/${origin}/${dest}`;
     Plotly.d3.json(url, function(error, response) {
   
@@ -18,7 +28,7 @@ function buildComparePlot() {
 //buildComparePlot();
 
 
-function buildAiportMap() {
+function buildAirportMap() {
   /*data route */
 var url = "/airports";
 
@@ -65,4 +75,11 @@ for (var i = 0; i <data.length; i++) {
 }
 )}
 
-buildAiportMap()
+//experimental! and it works!
+$(function(){
+  if($('body').is('.index')){
+    buildAirportMap()
+  }
+});
+
+//buildAiportMap()

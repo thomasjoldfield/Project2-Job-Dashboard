@@ -168,9 +168,9 @@ def DelayComparison(takeoff, landing):
         cancel_list.append(result.Cancelled)
     
     #equation should be (average / worst) * 100
-    delay_number = ((sum(delay_list) / len(delay_list)) / 10) * 100
-    cancel_number = ((sum(cancel_list) / len(delay_list)) / .2) * 100
-    tsa_number = ((airport_result[0].average_wait + airport_result[1].average_wait) / 27 * 100)
+    delay_number = (sum(delay_list) / 27.55)
+    cancel_number = (sum(cancel_list) / 1323.84)
+    tsa_number = ((airport_result[0].average_wait + airport_result[1].average_wait) / .18)
     R1 = (255 * delay_number) / 100
     G1 = (255 * (100-delay_number)) / 100
     R2 = (255 * cancel_number) / 100
