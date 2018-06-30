@@ -41,7 +41,7 @@
       <div class="collapse navbar-collapse" id="myNavbar">
         <ul class="nav navbar-nav">
           <li><a href="/">Home</a></li>
-          <li><a href="/flight">Stressors</a></li>
+          <li><a href="/flights">Stressors</a></li>
           <li  class="active"><a href="/compare">Comparison</a></li>
           <li><a href="/about">About</a></li>
 
@@ -59,35 +59,45 @@
     </div>
   </nav>
       
-  <div class="container text-center">    
-    <h1></h1><br>
-    <div class="row">
-      <div id="plot" class="col-lg-6">
-        <img src="https://placehold.it/150x80?text=STATS" class="img-responsive" style="width:100%" alt="Image">
-        <div class="col-md-6">
-            <form autocomplete="off" action="/action_page.php">
-              <div class="row"></div>
-                <div class="autocomplete" style="width:300px;">
-                    <input id="myInput" type="text" name="myAirport" placeholder="Search origin airport">
-                    <input type="submit">
-                </div>
-              </div>
-            </form>
-      </div>
-      <div id="destination" class="col-lg-6"> 
-        <img src="https://placehold.it/150x80?text=STATS" class="img-responsive" style="width:100%" alt="Image">
-        <div class="col-md-6">
-            <form autocomplete="off" action="/action_page.php">
-              <div class="row"></div>
-                <div class="autocomplete" style="width:300px;">
-                    <input id="myInput" type="text" name="myAirport" placeholder="Search destination airport">
-                    <input type="submit">
-                </div>
-              </div>
-            </form>   
+<div class="container text-center">
+  <div class = "row">
+    <h1>Stress-O-Meter!</h1><br>
+    <h3>Pick an origin and destination, then run the Stress-O-Meter!</h3>
+  </div>
+  <div class = "row">
+    <div class = "col-md-4">
+      <div class="input-group">
+        <div class="input-group-prepend">
+          <span class="input-group-text">Origin:</span>
         </div>
+        <textarea class="form-control" aria-label="With textarea"></textarea>
       </div>
-    </div><br>
+    </div>
+    <div class = "col-md-4">
+      <div class="input-group">
+        <div class="input-group-prepend">
+          <span class="input-group-text">Destination:</span>
+        </div>
+        <textarea class="form-control" aria-label="With textarea"></textarea>
+      </div>
+    </div>
+    <div class = "col-md-4">
+      <button type="button" class="btn btn-danger">Go! Go! Go!</button>
+    </div>
+  </div>
+<br>
+  <div class = "row">
+    <div id = "plot" style = "height:600px" class = "col-lg-12">
+
+    </div>
+  </div>
+  <div class = "row">
+    <div class = "col-md-12">
+
+    </div>
+  </div>
+</div>
+
 
   <footer class="container-fluid text-center">
     <p>GitHub: <a href="https://github.com/thomasjoldfield/Project2-Job-Dashboard">https://github.com/thomasjoldfield/Project2-Job-Dashboard</a></p>

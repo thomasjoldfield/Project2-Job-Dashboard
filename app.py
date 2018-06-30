@@ -85,12 +85,11 @@ def AllAirportsFunc():
     all_airports_data = []
     for result in results:
         all_airports_data.append({
-            result[0] : {
+                "code" : result[0],
                 "name" : result[1],
                 "lat" : result[2],
                 "long" : result[3],
                 "wait" : result[4]
-            }
         })
 
     return jsonify(all_airports_data)
