@@ -8,6 +8,7 @@ from flask import (
 from flask_sqlalchemy import SQLAlchemy
 from sqlalchemy import or_
 import os
+import numpy as np
 
 #flask setup
 app = Flask(__name__)
@@ -168,8 +169,8 @@ def DelayComparison(takeoff, landing):
         cancel_list.append(result.Cancelled)
     
     #equation should be (average / worst) * 100
-    delay_number = (sum(delay_list) / 27.55)
-    cancel_number = (sum(cancel_list) / 1323.84)
+    delay_number = (np.mean(delay_list) / 798) * 100
+    cancel_number = np.mean(cancel_list) * 100
     tsa_number = ((airport_result[0].average_wait + airport_result[1].average_wait) / .18)
     R1 = (255 * delay_number) / 100
     G1 = (255 * (100-delay_number)) / 100
@@ -179,10 +180,10 @@ def DelayComparison(takeoff, landing):
     G3 = (255 * (100-tsa_number)) / 100
 
     compare_data = {
-        "x" : ["Delays", "Cancelations", "TSA Wait"],
-        "y" : [delay_number, cancel_number, tsa_number],
+        "x" : [delay_number, cancel_number, tsa_number],
+        "y" : ["Delays", "Cancelations", "TSA Wait"],
         "type" : "bar",
-        #"orientation" : "h",
+        "orientation" : "h",
         "marker" : {
             "color" : [f"rgba({R1},{G1},0,1)", f"rgba({R2},{G2},0,1)", f"rgba({R3},{G3},0,1)",]}
     }

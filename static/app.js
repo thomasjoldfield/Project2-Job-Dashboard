@@ -1,6 +1,11 @@
 //some button listeners
+
+//this function makes sure the compare code only runs on the compare page
 $(function(){
+//This searches for a body element that has the class "compare". MAke sure that any new html includes the page name as a class on the body.
   if($('body').is('.compare')){
+//When it finds a compare body, it applies the below code.
+//This code adds an event listener onto a compare button. That listener runs the "buildComparePlot" function on click
     document.getElementById("compareBtn").addEventListener("click", buildComparePlot);
   }
 });
@@ -8,24 +13,66 @@ $(function(){
 
 
 
-/*Thomas is adding this part here to build our comparison bar charts*/
+//Compare Function - pull and display data for a single origin-destination pairing.
 function buildComparePlot() {
-    /* data route */
-    /*Make this dynamic*/
+//First step is to pull origin and destination from the UI. Finds the user input using ID
     var origin = document.getElementById("origin_input").value;
     var dest = document.getElementById("dest_input").value;
+//Build URL using the above inputs
     var url = `/delaycomparison/${origin}/${dest}`;
+//Go and get data from the newly build API destination. Data is already beautifully formatted (ha) for Plotly, so just pass results.
     Plotly.d3.json(url, function(error, response) {
   
       console.log(response);
-
       var data = [response];
-  
-      Plotly.newPlot("plot", data);
+      var layout = {
+        margin:{
+          l:200
+        },
+        xaxis: {
+          title: 'Stressfulness',
+          titlefont: {
+            famly: 'Arial, sans-serif',
+            size: 18,
+            color: 'darkgrey'
+          },
+          showgrid: true,
+          zeroline: true,
+          mirror: 'ticks',
+          gridcolor: '#bdbdbd',
+          gridwidth: 2,
+          zerolinecolor: '#969696',
+          zerolinewidth: 4,
+          linecolor: '#636363',
+          linewidth: 6,
+          tickfont: {
+            famly: 'Arial, sans-serif',
+            size: 18,
+            color: 'darkgrey' 
+          },
+          range: [0, 100]},
+        yaxis: {
+          showgrid: false,
+          zeroline: true,
+          mirror: 'ticks',
+          gridcolor: '#bdbdbd',
+          gridwidth: 2,
+          zerolinecolor: '#969696',
+          zerolinewidth: 4,
+          linecolor: '#636363',
+          linewidth: 6,
+          tickfont: {
+            famly: 'Arial, sans-serif',
+            size: 18,
+            color: 'darkgrey' 
+          },
+        }
+      };
+      Plotly.newPlot("plot", data, layout);
     });
   }
   
-//buildComparePlot();
+//We do not run the function here, we wait for button click
 
 
 function buildAirportMap() {
