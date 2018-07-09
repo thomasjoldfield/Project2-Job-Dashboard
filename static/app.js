@@ -12,7 +12,6 @@ $(function(){
 
 
 
-
 //Compare Function - pull and display data for a single origin-destination pairing.
 function buildComparePlot() {
 //First step is to pull origin and destination from the UI. Finds the user input using ID
@@ -27,7 +26,8 @@ function buildComparePlot() {
       var data = [response];
       var layout = {
         margin:{
-          l:200
+          l:200,
+          r:200
         },
         xaxis: {
           title: 'Stressfulness',
@@ -69,6 +69,16 @@ function buildComparePlot() {
         }
       };
       Plotly.newPlot("plot", data, layout);
+      console.log(data[0].x)
+      var stressNumber = data[0].x.reduce(add,0);
+      
+      function add(a,b){
+        return a+b;
+      }
+      console.log(stressNumber)
+      var c = new CountUp("stressCounter",0,stressNumber,0,5)
+
+      c.start();
     });
   }
   
