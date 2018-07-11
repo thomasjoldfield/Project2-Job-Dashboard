@@ -100,20 +100,92 @@ d3.json(url,function(error, response){
 
 
 
-//Create a map object 
-  var myMap = L.map("mainMap", {
-  center: [38, -96],
-  zoom: 5
-
-});
-
 // Adding a tile layer (the background map image) to our map
 // We use the addTo method to add objects to our map
-L.tileLayer(
+var airportMap = L.tileLayer(
   "https://api.mapbox.com/styles/v1/mapbox/outdoors-v10/tiles/256/{z}/{x}/{y}?" +
-    "access_token=pk.eyJ1IjoiaGVhdGhlcjg5IiwiYSI6ImNqaWF2YjNsNjAwMW0zcHFyOWJzMnR4bXYifQ.OBd2HT7cnCJxqxgj0-haNA." +
-    "T6YbdDixkOBWH_k9GbS8JQ"
-).addTo(myMap);
+    "access_token=pk.eyJ1Ijoia2VsYmFyMTMiLCJhIjoiY2ppYXVoNWk4MTVtbjN3a3p3amhjcG80ZyJ9.IqaKTXtSTTf8lyLE-Q4Njg" ,
+
+);
+
+// Initialize all of the LayerGroups we'll be using
+var layers = {
+  TSA_WAIT: new L.LayerGroup(),
+  TSA_WAIT_SHORT: new L.LayerGroup(),
+  DELAYS: new L.LayerGroup(),
+  DELAYS_LOW: new L.LayerGroup(),
+  NORMAL: new L.LayerGroup(),
+  
+};
+// Create the map with our layers
+var myMap = L.map("mainMap", {
+  center: [38, -96],
+  zoom: 5,
+  layers: [
+    layers.TSA_WAIT,
+    layers.TSA_WAIT_SHORT,
+    layers.DELAYS,
+    layers.DELAYS_LOW,
+    layers.NORMAL
+    
+  ]
+});
+airportMap.addTo(myMap);
+// Create an overlays object to add to the layer control
+var overlays = {
+  "Longest TSA Wait": layers.TSA_WAIT,
+  "Shortest TSA Wait": layers.TSA_WAIT_SHORT,
+  "Most Destination Delays": layers.DELAYS,
+  "Least Destination Delays": layers.DELAYS_LOW,
+  "All": layers.NORMAL
+  
+};
+// Create a control for our layers, add our overlay layers to it
+L.control.layers(null, overlays).addTo(myMap);
+
+// Create a legend to display information about our map
+var info = L.control({
+  position: "bottomright"
+});
+
+// When the layer control is added, insert a div with the class of "legend"
+info.onAdd = function() {
+  var div = L.DomUtil.create("div", "legend");
+  return div;
+};
+// Add the info legend to the map
+info.addTo(myMap);
+var icons = {
+  TSA_WAIT: L.ExtraMarkers.icon({
+    icon: "ion-timer",
+    iconColor: "white",
+    markerColor: "lightcoral",
+    shape: "pin"
+  }),
+  TSA_WAIT_SHORT: L.ExtraMarkers.icon({
+    icon: "ion-timer",
+    iconColor: "white",
+    markerColor: "lightgreen",
+    shape: "pin"
+  }),
+  DELAYS: L.ExtraMarkers.icon({
+    icon: "ion-sad",
+    iconColor: "white",
+    markerColor: "lightcoral",
+    shape: "pin"
+  }),
+  DELAYS_LOW: L.ExtraMarkers.icon({
+    icon: "ion-happy",
+    iconColor: "white",
+    markerColor: "lightgreen",
+    shape: "pin"
+  }),
+  NORMAL: LExtraMarkers.icon({
+    icon: "ion-airplane",
+    iconColor: "white",
+    markerColor: "blue",
+    shape: "pin"
+  });
 
 
 
